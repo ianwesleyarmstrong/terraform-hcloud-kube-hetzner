@@ -84,8 +84,6 @@ module "proxy_server" {
   k3s_registries               = ""
   opensuse_microos_mirror_link = var.opensuse_microos_mirror_link
 
-  private_ipv4 = null
-
   labels = var.labels
 
   automatically_upgrade_os = var.automatically_upgrade_os
