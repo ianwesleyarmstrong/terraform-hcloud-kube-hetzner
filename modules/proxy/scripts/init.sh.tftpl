@@ -2,12 +2,6 @@
 
 set -e
 
-limiter=0
-until docker --help > /dev/null; do sleep 1; limiter=$(( limiter + 1 )); if limiter > 120; then exit 1; fi; done
-until docker compose --help > /dev/null; do sleep 1; limiter=$(( limiter + 1 )); if limiter > 120; then exit 1; fi; done
-
-systemctl enable docker
-systemctl start docker
 
 mkdir -p /var/container-proxy/cache
 mkdir -p /var/container-proxy/ca
@@ -26,6 +20,9 @@ fi
 mkdir -p /var/proxy-runtime
 cd /var/proxy-runtime
 cp /root/docker-compose.yaml .
+
+systemctl enable docker
+systemctl start docker
 
 docker compose build --progress quiet
 
