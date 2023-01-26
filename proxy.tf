@@ -20,8 +20,8 @@ module "proxy" {
   server_type    = var.proxy_node_type
   ipv4_subnet_id = hcloud_network_subnet.all_others.id
 
-  # index 0 is the network gateway, so 1 used for the proxy. Put your next machine at 2, if you need a similar non-k8s node.
-  private_ipv4 = cidrhost(hcloud_network_subnet.all_others.ip_range, 1)
+  # index 0 is the network gateway, so 10 used for the proxy. Put your next machine at 11, if you need a similar non-k8s node.
+  private_ipv4 = cidrhost(hcloud_network_subnet.all_others.ip_range, 10)
 
   #   packages_to_install          = local.packages_to_install
   dns_servers                  = var.dns_servers
