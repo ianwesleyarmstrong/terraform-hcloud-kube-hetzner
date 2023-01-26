@@ -32,7 +32,14 @@ resource "hcloud_network_subnet" "agent" {
   network_id   = hcloud_network.k3s.id
   type         = "cloud"
   network_zone = var.network_region
-  ip_range     = local.network_ipv4_subnets[count.index]
+  ip_range     = local.network_ipv4_subnets[count.index + 1]
+}
+
+resource "hcloud_network_subnet" "all_others" {
+  network_id   = hcloud_network.k3s.id
+  type         = "cloud"
+  network_zone = var.network_region
+  ip_range     = local.network_ipv4_subnets[0]
 }
 
 resource "hcloud_firewall" "k3s" {

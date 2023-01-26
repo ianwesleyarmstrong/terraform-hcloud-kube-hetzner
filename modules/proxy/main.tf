@@ -79,6 +79,7 @@ module "proxy_server" {
   location                     = var.location
   server_type                  = var.server_type
   ipv4_subnet_id               = var.ipv4_subnet_id
+  private_ipv4                 = var.private_ipv4
   packages_to_install          = ["docker", "docker-compose"]
   dns_servers                  = var.dns_servers
   k3s_registries               = ""
