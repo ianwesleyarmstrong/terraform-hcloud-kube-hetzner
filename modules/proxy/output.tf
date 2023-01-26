@@ -19,7 +19,7 @@ output "env_vars" {
 
 output "preinstall_exec" {
   value = [
-    "curl http://${module.proxy_server.ipv4_address}/ca.crt > /root/ca.crt",
+    "curl http://${module.proxy_server.private_ipv4_address}:3128/ca.crt > /root/ca.crt",
     "trust anchor --store /root/ca.crt",
   ]
   description = "Run this on your node for it to use the proxy; this installs the proxy's certificate."
