@@ -18,10 +18,10 @@ module "proxy" {
   #   placement_group_id = var.placement_group_disable ? 0 : hcloud_placement_group.agent[floor(each.value.index / 10)].id
   location       = var.proxy_node_location
   server_type    = var.proxy_node_type
-  ipv4_subnet_id = hcloud_network_subnet.hcloud_network_subnet.all_others.id[0]
+  ipv4_subnet_id = hcloud_network_subnet.all_others.id
 
-  # index 0 used for the proxy. Put your next machine at 1, if you need a similar non-k8s node.
-  private_ipv4 = cidrhost(hcloud_network_subnet.hcloud_network_subnet.all_others.ip_range, 0)
+  # index 0 is the network gateway, so 1 used for the proxy. Put your next machine at 2, if you need a similar non-k8s node.
+  private_ipv4 = cidrhost(hcloud_network_subnet.all_others.ip_range, 1)
 
   #   packages_to_install          = local.packages_to_install
   dns_servers                  = var.dns_servers
