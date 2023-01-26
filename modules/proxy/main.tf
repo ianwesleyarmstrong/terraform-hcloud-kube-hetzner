@@ -122,6 +122,7 @@ resource "null_resource" "init_proxy" {
 
   provisioner "remote-exec" {
     inline = [
+      "while [[ ! -f /root/init.sh ]] && [[ ! -f /root/docker-compose.yaml ]]; do sleep 1; done",
       "/bin/sh /root/init.sh"
     ]
   }
