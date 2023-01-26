@@ -510,3 +510,24 @@ variable "additional_tls_sans" {
   default     = []
   type        = list(string)
 }
+
+variable "enable_proxy_node" {
+  description = "Create a separate node in the private network, outside of the kubernetes cluster, which proxies all container pull requests. It costs an extra machine, but it your cluster will have much fewer ImagePullBackoffs."
+  type        = bool
+  default     = false
+}
+variable "proxy_node_type" {
+  description = "The server type (cx21, ...) of the proxy node. Note that the cache is stored on the node itself, so check the disk size. cx11 is too small for the MicroOS image."
+  type        = string
+  default     = "cx21"
+}
+variable "proxy_node_location" {
+  description = "Location of the proxy."
+  type        = string
+  default     = "fsn1"
+}
+variable "proxy_registries" {
+  type        = string
+  description = "Space separated list of registry hostnames, e.g. \"k8s.gcr.io registry.k8s.io gcr.io\"."
+  default     = "k8s.gcr.io registry.k8s.io gcr.io ghcr.io quay.io registry.gitlab.com gitlab.com"
+}

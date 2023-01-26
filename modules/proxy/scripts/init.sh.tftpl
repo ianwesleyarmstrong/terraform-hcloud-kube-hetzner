@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+limiter=0
+until docker --help > /dev/null; do sleep 1; limiter=$(( limiter + 1 )); if limiter > 120; then exit 1; fi; done
+until docker compose --help > /dev/null; do sleep 1; limiter=$(( limiter + 1 )); if limiter > 120; then exit 1; fi; done
+
+systemctl enable docker
+systemctl start docker
+
+mkdir -p /var/container-proxy/cache
+mkdir -p /var/container-proxy/ca
+mkdir -p /var/file-server
+
+# download the microos image
+opensuse_microos_mirror_link=${opensuse_microos_mirror_link}
+fname=$( echo $opensuse_microos_mirror_link | awk 'BEGIN {FS="/"} {print $NF}' )
+fpath="/var/file-server/$${fname}"
+if [[ ! -f "$${fpath}" ]]; then
+    curl "$${opensuse_microos_mirror_link}" > "$${fpath}"
+    chmod 644 "$${fpath}"
+fi
+
+
+mkdir -p /var/proxy-runtime
+cd /var/proxy-runtime
+cp /root/docker-compose.yaml .
+
+docker compose build --progress quiet
+
+docker compose up --detach
+
+date | tee /root/proxy-init-finished.txt

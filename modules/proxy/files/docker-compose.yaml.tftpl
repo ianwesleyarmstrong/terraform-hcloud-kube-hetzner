@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  container-proxy:
+    image: rpardini/docker-registry-proxy:0.6.4
+    restart: always
+    ports:
+      - 0.0.0.0:3128:3128
+    volumes:
+      - /var/container-proxy/cache:/docker_mirror_cache
+      - /var/container-proxy/ca:/ca
+    environment:
+      CACHE_MAX_SIZE: 5g
+      ENABLE_MANIFEST_CACHE: true
+      # dev images: short cache ttl
+      MANIFEST_CACHE_PRIMARY_REGEX: "(stable|nightly|production|test)"
+      MANIFEST_CACHE_PRIMARY_TIME: "10m"
+      # 'Secondary' tier defaults any tag that has 3 digits or dots, in the hopes of matching most explicitly-versioned tags.
+      # It caches for 60d, which is also the cache time for the large binary blobs to which the manifests refer.
+      # That makes them effectively immutable. Make sure you're not affected; tighten this regex or widen the primary tier.
+      ENV MANIFEST_CACHE_SECONDARY_REGEX: "(.*)(\\d|\\.)+(.*)(\\d|\\.)+(.*)(\\d|\\.)+"
+      ENV MANIFEST_CACHE_SECONDARY_TIME: "60d"
+      # The default cache duration for manifests that don't match either the primary or secondary tiers above.
+      # In the default config, :latest and other frequently-used tags will get this value.
+      ENV MANIFEST_CACHE_DEFAULT_TIME: "1h"
+      REGISTRIES: "${proxy_registries}"
+      # AUTH_REGISTRIES: "registry.gitlab.com:{GITLAB_REGISTRY_USERNAME}:{GITLAB_REGISTRY_TOKEN} gitlab.com:{GITLAB_REGISTRY_USERNAME}:{GITLAB_REGISTRY_TOKEN}"
+  file-server:
+    image: nginx
+    ports:
+      - 0.0.0.0:80:80
+    restart: always
+    environment: {}
+    volumes:
+      - /var/file-server:/usr/share/nginx/html

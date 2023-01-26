@@ -32,7 +32,8 @@ module "agents" {
   automatically_upgrade_os = var.automatically_upgrade_os
 
   depends_on = [
-    hcloud_network_subnet.agent
+    hcloud_network_subnet.agent,
+    module.proxy
   ]
 }
 
