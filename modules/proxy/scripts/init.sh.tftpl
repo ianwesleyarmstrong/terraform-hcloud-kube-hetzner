@@ -5,17 +5,6 @@ set -e
 
 mkdir -p /var/container-proxy/cache
 mkdir -p /var/container-proxy/ca
-mkdir -p /var/file-server
-
-# download the microos image
-opensuse_microos_mirror_link=${opensuse_microos_mirror_link}
-fname=$( echo $opensuse_microos_mirror_link | awk 'BEGIN {FS="/"} {print $NF}' )
-fpath="/var/file-server/$${fname}"
-if [[ ! -f "$${fpath}" ]]; then
-    curl "$${opensuse_microos_mirror_link}" > "$${fpath}"
-    chmod 644 "$${fpath}"
-fi
-
 
 mkdir -p /var/proxy-runtime
 cd /var/proxy-runtime

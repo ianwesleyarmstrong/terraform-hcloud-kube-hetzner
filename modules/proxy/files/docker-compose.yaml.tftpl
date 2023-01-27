@@ -24,11 +24,4 @@ services:
       ENV MANIFEST_CACHE_DEFAULT_TIME: "1h"
       REGISTRIES: "${proxy_registries}"
       # AUTH_REGISTRIES: "registry.gitlab.com:{GITLAB_REGISTRY_USERNAME}:{GITLAB_REGISTRY_TOKEN} gitlab.com:{GITLAB_REGISTRY_USERNAME}:{GITLAB_REGISTRY_TOKEN}"
-  file-server:
-    image: nginx
-    ports:
-      - 0.0.0.0:80:80
-    restart: always
-    environment: {}
-    volumes:
-      - /var/file-server:/usr/share/nginx/html
+

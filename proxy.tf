@@ -21,7 +21,7 @@ module "proxy" {
   ipv4_subnet_id = hcloud_network_subnet.all_others.id
 
   # index 0 is the network gateway, so 10 used for the proxy. Put your next machine at 11, if you need a similar non-k8s node.
-  private_ipv4 = cidrhost(hcloud_network_subnet.all_others.ip_range, 10)
+  private_ipv4 = local.proxy_private_ip
 
   #   packages_to_install          = local.packages_to_install
   dns_servers                  = var.dns_servers
@@ -41,7 +41,7 @@ module "proxy" {
 }
 
 locals {
-  proxied_opensuse_microos_mirror_link = var.enable_proxy_node ? "http://${module.proxy[0].private_ipv4}/${basename(var.opensuse_microos_mirror_link)}" : var.opensuse_microos_mirror_link
-  proxy_env                            = var.enable_proxy_node ? module.proxy[0].env_vars : {}
-  proxy_preinstall_exec                = var.enable_proxy_node ? module.proxy[0].preinstall_exec : []
+  proxy_private_ip      = cidrhost(hcloud_network_subnet.all_others.ip_range, 10)
+  proxy_env             = var.enable_proxy_node ? module.proxy[0].env_vars : {}
+  proxy_preinstall_exec = var.enable_proxy_node ? module.proxy[0].preinstall_exec : []
 }

@@ -93,6 +93,10 @@ module "proxy_server" {
 
 resource "null_resource" "init_proxy" {
 
+  depends_on = [
+    module.proxy_server,
+  ]
+
   triggers = {
     "init_sh" : local.init_sh,
     "docker_compose_yaml" : local.docker_compose_yaml,
@@ -123,7 +127,6 @@ resource "null_resource" "init_proxy" {
 
   provisioner "remote-exec" {
     inline = [
-      "while [[ ! -f /root/init.sh ]] && [[ ! -f /root/docker-compose.yaml ]]; do sleep 1; done",
       "/bin/sh /root/init.sh"
     ]
   }
