@@ -84,6 +84,7 @@ module "proxy_server" {
   dns_servers                  = var.dns_servers
   k3s_registries               = ""
   opensuse_microos_mirror_link = var.opensuse_microos_mirror_link
+  k3s_registries_update_script = "echo Nothing to do here."
 
   labels = var.labels
 
